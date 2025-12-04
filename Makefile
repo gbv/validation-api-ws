@@ -9,7 +9,7 @@ test:
 	@. .venv/bin/activate && coverage run -m pytest -v -s && coverage report -m
 
 start:
-	@.venv/bin/python3 app.py default_profiles.json
+	@.venv/bin/python3 app.py
 
 lint:
 	@.venv/bin/flake8 *.py lib/ tests/ --ignore=C901,E741,W504 --exit-zero --max-complexity=10 --max-line-length=100 --statistics

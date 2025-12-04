@@ -3,6 +3,7 @@ __pycache__
 .coverage
 reports/
 stage/
+config.json
 *.tmp
 tmp/
 .vscode/settings.json

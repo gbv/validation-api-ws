@@ -94,9 +94,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-w', '--wsgi', action=argparse.BooleanOptionalAction, help="Use WSGI")
     parser.add_argument('-d', '--debug', action=argparse.BooleanOptionalAction)
-    parser.add_argument('config', help="Config file")
+
+    config_file = "config.json" if Path('config.json').exists() else "config.default.json"
+    parser.add_argument('config', help="Config file", default=config_file, nargs='?')
     args = parser.parse_args()
+
+    print(f"Loading configuration from {args.config}")
     config = json.load(Path(args.config).open())
+    # TODO: check: config must be object with profiles
+
     config['debug'] = args.debug
     port = config.get('port', 7007)
     init(**config)

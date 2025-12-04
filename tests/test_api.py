@@ -77,7 +77,7 @@ def test_api(client):
 
     client.fine('GET', '/validate/json?data={', [{
         'message': 'Expecting property name enclosed in double quotes',
-        'position': {'line': '1', 'linecol': '1:2', 'offset': '1'}} 
+        'position': {'line': '1', 'linecol': '1:2', 'offset': '1'}}
     ])
 
 
