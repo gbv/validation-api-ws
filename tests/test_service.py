@@ -1,6 +1,5 @@
 import pytest
 from tempfile import TemporaryDirectory
-from pathlib import Path
 
 from lib import ValidationService
 
@@ -41,5 +40,3 @@ def test_config():
 
         with pytest.raises(Exception, match=r"URL invalid or too long"):
             service.validate('json', url="example.org")
-
-

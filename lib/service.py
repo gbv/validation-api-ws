@@ -5,8 +5,6 @@ import validators
 import io
 import re
 
-import inspect
-
 
 class ValidationService:
     def __init__(self, **config):

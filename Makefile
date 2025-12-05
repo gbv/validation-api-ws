@@ -7,7 +7,9 @@ deps:
 
 test:
 	@. .venv/bin/activate && coverage run --branch -m pytest -v -s && coverage report -m
-	# TODO: generate coverage report in HTML for individual lines
+
+all: # TODO: include integration test with backends such as QPM
+	@. .venv/bin/activate && coverage run --branch -m pytest -v -s && coverage report -m && coverage html
 
 start:
 	@.venv/bin/python3 app.py
