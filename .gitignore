@@ -4,6 +4,7 @@ __pycache__
 reports/
 stage/
 downloads/
+config/
 config.json
 *.tmp
 tmp/

@@ -82,9 +82,16 @@ if __name__ == '__main__':  # pragma: no cover
     parser.add_argument('-w', '--wsgi', action=argparse.BooleanOptionalAction, help="Use WSGI")
     parser.add_argument('-d', '--debug', action=argparse.BooleanOptionalAction)
 
-    config_file = "config.json" if Path('config.json').exists() else "config.default.json"
-    parser.add_argument('config', help="Config file", default=config_file, nargs='?')
+    config_file = "config.default.json"
+    for file in [Path("config.json"), Path("config") / "config.json"]:
+        if file.exists():
+            config_file = file
+
+    parser.add_argument('config', help="Config file or directory", default=config_file, nargs='?')
     args = parser.parse_args()
+
+    if Path(args.config).is_dir():
+        args.config = Path(args.config) / "config.json"
 
     print(f"Loading configuration from {args.config}")
     config = json.load(Path(args.config).open())

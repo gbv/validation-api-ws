@@ -5,6 +5,8 @@
 
 > Demo of a simple Web API to validate data against predefined criteria
 
+This web service implements a **[Data Validation API](#API)** being specified as part of project AQinDA. The API helps allows to check data against defined application profiles and to integrate such checks into data processing workflows. The API is not meant to define quality criteria of application profiles, this is another part of the project.
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -25,9 +27,12 @@ The web application is started on <http://localhost:7007> by default.
 
 ### From sources
 
-- Clone repository
-- `make deps`
-- `make start` 
+Requires basic development toolchain (`sudo apt install build-essential`) and Python 3 with module venv to be installed.
+
+1. clone repository: `git clone https://github.com/gbv/validation-api-ws.git && cd validation-api-ws`
+2. run `make deps` to install dependencies
+3. optionally [Configure](#configuration] the instance with 
+3. `make start` 
 
 ### Via Docker
 
@@ -53,9 +58,9 @@ docker run --rm -p 7007:7007 validator
 
 ## Configuration
 
-If local file `config.json` exist, it is used for configuration, otherwise [default configuration](config.default.json) is used.
+The [default configuration](config.default.json) contains some base formats. To defined the application profiles to be checked against, create a configuration file in JSON format at `config.json` in the current directory or in the local subdirectory `config`. It is also possible to pass the location of config file or directory with argument `--config` at startup.
 
-Configuration must contain key `profiles` with a list of profile objects, each having a unique `id` and a list of `checks`. See [profiles configuration JSON Schema](lib/validate/profiles-schema.json) for details. Additional config fields include:
+The configuration file must contain field `profiles` with a list of profile objects, each having a unique `id` and a list of `checks`. See [profiles configuration JSON Schema](lib/validate/profiles-schema.json) for details. Additional config fields include:
 
 - `title` (title of the webservice) is set to "Validation Service" by default.
 - `port` (numeric port to run the webservice) is set to 7007 by default.
@@ -108,7 +113,6 @@ Same as GET request but data is passed as request body or as file upload (conten
 
 ## Contributing
 
-Requires basic development toolchain (`sudo apt install build-essential`) and Python 3 with module venv to be installed.
 
 - `make deps` installs Python dependencies in a virtual environment in directory `.venv`. You may want to call `. .venv/bin/activate` to active the environment.
 - `make test` runs unit tests
@@ -125,6 +129,8 @@ test -f config.json && docker run --rm -p 7007:7007 --volume ./config.json:/app/
 ~~~
 
 See also <https://github.com/gbv/validation-server> for a previous implementation in NodeJS. Both implementations may converge
+
+This work is [funded by DFG (project "AQinDa")](https://gepris.dfg.de/gepris/projekt/521659096)
 
 ## License
 
