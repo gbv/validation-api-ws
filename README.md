@@ -81,8 +81,13 @@ Each check is either a string, referencing another profile or a base format, or 
 
 A check with two fields:
 
-- `language` - schema language: `jsonschema` (JSON Schema) or `xsd` (XML Schema)
-- `schema` - schema file or ULR
+- `language` - schema language
+    - `json-schema` - JSON Schema
+    - `xsd` - XML Schema, *not implemented yet*
+    - `schematron` *not implemented yet*
+    - `avram` *not implemented yet*
+    - `pcre` - Perl Compatible Regular Expressions (PCRE) *not implemented yet*
+- `schema` - schema file or URL
 
 ## API
 

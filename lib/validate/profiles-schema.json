@@ -55,8 +55,7 @@
             },
             "language": {
               "description": "Schema language",
-              "$comment": "TODO: Add regex, preg, xsd, schematron, avram...",
-              "enum": [ "jsonschema" ]
+              "enum": [ "json-schema", "xsd", "schematron", "avram", "pcre" ]
             }
           }
         }

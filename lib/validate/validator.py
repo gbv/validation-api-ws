@@ -8,36 +8,49 @@ from .xml import parseXML
 schema = json.load((Path(__file__).parent / 'profiles-schema.json').open())
 
 
-class Check(object):
-    def __init__(self, config):
-        if type(config) == str:
-            match config:
-                case "json":
-                    self.method = parseJSON
-                case "xml":
-                    self.method = parseXML
-                case _:
-                    # TODO: allow to reference another profile
-                    raise Exception(f"Unknown check: {config}")
-        elif "schema" in config and "language" in config:
-            match config["language"]:
-                case "xsd":
-                    pass  # TODO: load as local file or from URL with cache
-                case "jsonschema":
-                    pass  # TODO
-                case _:
-                    raise Exception(f"Unsupported schema language: {config['language']}")
+builtin = {
+    "json": parseJSON,
+    "xml": parseXML
+}
 
+
+def resolve(path, root):
+    path = Path(path)
+    if path.is_absolute() or not root:
+        return path
+    else:
+        return root / path
+
+
+def compile(check, root):
+    if type(check) == str:
+        if check in builtin:
+            return builtin[check]
         else:
-            raise Exception(f"Unkown check: {json.dumps(config)}")
+            # TODO: allow to reference another profile
+            raise Exception(f"Unknown check: {config}")
 
-    def execute(self, data):
-        self.method(data)
+    if "schema" in check and "language" in check:
+        # TODO: support URL in additio to local file
+        schema = resolve(check["schema"], root)
+
+        match check["language"]:
+            case "json-schema":
+                schema = json.load(schema.open())
+                return lambda data: validateJSON(parseJSON(data), schema)
+            # case "xsd":
+            #    pass  # TODO: load as local file or from URL with cache
+            case _:
+                raise Exception(f"Unsupported schema language: {check['language']}")
+
+    raise Exception(f"Unkown check: {json.dumps(check)}")
 
 
 class Validator(object):
     def __init__(self, profiles, **config):
         validateJSON(profiles, schema)
+
+        root = config.get("root")
 
         checks = {p["id"]: p.get("checks", []) for p in profiles}
         if len(checks) != len(profiles):
@@ -48,7 +61,7 @@ class Validator(object):
             id = p["id"]
 
             # TODO: support reference to profile as check
-            checks[id] = [Check(c) for c in checks[id]]
+            checks[id] = [compile(c, root) for c in checks[id]]
 
             about = ['id', 'title', 'description', 'url']
             self.profiles[id] = {key: p[key] for key in about if p.get(key, False)}
@@ -62,4 +75,4 @@ class Validator(object):
         if file:
             data = Path(file).read_bytes()
         for check in self.checks[profile]:
-            check.execute(data)
+            check(data)

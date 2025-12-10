@@ -1,8 +1,7 @@
 import pytest
+import json
 from tempfile import TemporaryDirectory
-
 from lib import ValidationService
-
 from pathlib import Path
 
 
@@ -45,11 +44,10 @@ def test_config():
         service = ValidationService(profiles=profiles, downloads=path)
 
         with pytest.raises(Exception, match=r"URL invalid or too long"):
-            service.validate('json', url="example.org")            
+            service.validate('json', url="example.org")
 
     path = Path(__file__).parent
     service = ValidationService(path / "config.json")
-    assert service.profiles() == [ {"id": "json"} ]
 
     assert service.validate('json', url="http://example.org/") == [
         {'message': 'Expecting value',
@@ -58,6 +56,13 @@ def test_config():
     assert service.validate('json', url="http://example.org/valid.json") == []
 
 
+def test_schemas():
+    path = Path(__file__).parent
+    config = json.load((path / "config.json").open())
+    service = ValidationService(config, root=path)
+    assert service.profiles() == [{"id": "json"}, {"id": "ap"}]
 
+    assert service.validate('ap', data=json.dumps(config["profiles"])) == []
 
-
+    assert service.validate('ap', url="http://example.org/valid.json") == [
+        {'message': "'id' is a required property", 'position': {'jsonpointer': '/0'}}]

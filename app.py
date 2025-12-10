@@ -57,7 +57,7 @@ def validate(profile):
         args = dict([(k, request.args.get(k)) for k in params if k in request.args])
     else:
         mime = request.content_type or ''
-        if mime == 'multipart/form-data':
+        if mime.startswith('multipart/form-data'):
             if 'file' not in request.files:
                 raise ApiError("Missing file upload")
             args = {"data": request.files['file'].stream}
