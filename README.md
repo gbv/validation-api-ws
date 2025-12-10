@@ -79,15 +79,15 @@ Each check is either a string, referencing another profile or a base format, or 
 
 ### Schema checks
 
-A check with two fields:
+Schema checks validates against a schema in some known schema language. The check is configured with two fields:
 
-- `language` - schema language
-    - `json-schema` - JSON Schema
-    - `xsd` - XML Schema, *not implemented yet*
-    - `schematron` *not implemented yet*
-    - `avram` *not implemented yet*
-    - `pcre` - Perl Compatible Regular Expressions (PCRE) *not implemented yet*
+- `language` - the schema language
 - `schema` - schema file or URL
+
+The following schema languages are supported:
+
+- `json-schema` - [JSON Schema](https://json-schema.org/)
+- `xsd` - XML Schema (*not implemented yet*)
 
 ## API
 

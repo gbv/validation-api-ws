@@ -47,7 +47,7 @@ def test_config():
             service.validate('json', url="example.org")
 
     path = Path(__file__).parent
-    service = ValidationService(path / "config.json")
+    service = ValidationService(path / "example.json")
 
     assert service.validate('json', url="http://example.org/") == [
         {'message': 'Expecting value',
@@ -58,7 +58,7 @@ def test_config():
 
 def test_schemas():
     path = Path(__file__).parent
-    config = json.load((path / "config.json").open())
+    config = json.load((path / "example.json").open())
     service = ValidationService(config, root=path)
     assert service.profiles() == [{"id": "json"}, {"id": "ap"}]
 
