@@ -3,6 +3,8 @@ from tempfile import TemporaryDirectory
 
 from lib import ValidationService
 
+from pathlib import Path
+
 
 def test_config():
 
@@ -43,4 +45,19 @@ def test_config():
         service = ValidationService(profiles=profiles, downloads=path)
 
         with pytest.raises(Exception, match=r"URL invalid or too long"):
-            service.validate('json', url="example.org")
+            service.validate('json', url="example.org")            
+
+    path = Path(__file__).parent
+    service = ValidationService(path / "config.json")
+    assert service.profiles() == [ {"id": "json"} ]
+
+    assert service.validate('json', url="http://example.org/") == [
+        {'message': 'Expecting value',
+         'position': {'line': '1', 'linecol': '1:1', 'offset': '0'}}]
+
+    assert service.validate('json', url="http://example.org/valid.json") == []
+
+
+
+
+

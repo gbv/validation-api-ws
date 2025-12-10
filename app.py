@@ -13,11 +13,9 @@ service = None
 
 def init(config):
     global service
-
-    app.debug = config.get("debug", False)
-    app.config['title'] = config.get('title', 'Validation Service')
-
     service = ValidationService(**config)
+    app.config['title'] = config.get('title', 'Validation Service')
+    return config.get('port', 7007)
 
 
 class ApiError(Exception):
@@ -91,11 +89,9 @@ if __name__ == '__main__':  # pragma: no cover
         args.config = Path(args.config) / "config.json"
 
     print(f"Loading configuration from {args.config}")
-    config = json.load(Path(args.config).open())
+    port = init(json.load(Path(args.config).open()))
 
-    config['debug'] = args.debug
-    port = config.get('port', 7007)
-    init(config)
+    app.debug = args.debug
 
     if args.wsgi:
         print(f"Starting WSGI server at http://localhost:{args.port}/")

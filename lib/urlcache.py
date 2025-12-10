@@ -23,7 +23,7 @@ class URLCache(object):
         if cached and body_file.exists() and meta_file.exists():
             body = body_file.read_bytes()
             meta = json.loads(meta_file.read_text(encoding="utf-8"))
-            return body, meta
+            return body_file, meta
 
         response = requests.get(url)
         response.raise_for_status()

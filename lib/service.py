@@ -4,20 +4,33 @@ from pathlib import Path
 import validators
 import io
 import re
+import json
 
 
 class ValidationService:
-    def __init__(self, **config):
+    def __init__(self, config=None, **kwargs):
+        if type(config) is str or isinstance(config, Path):
+            file = Path(config)
+            config = json.load(file.open())
+            config["root"] = config.get("root", file.parent.absolute())
+
+        if config:
+            config |= kwargs
+        else:
+            config = kwargs
+
+        self.root = config.get("root", None)
 
         for name in ['stage', 'reports', 'downloads']:
             path = config.get(name, False)
             if path:
                 path = Path(path)
-                setattr(self, name, path)
+                if self.root and not path.is_absolute():
+                    path = self.root / path
                 if not path.is_dir():
                     raise FileNotFoundError(f"Missing {name} directory: {path}")
-            else:
-                setattr(self, name, None)
+
+            setattr(self, name, path)
 
         if self.downloads:
             self.urlcache = URLCache(self.downloads)
@@ -44,7 +57,7 @@ class ValidationService:
                 raise ValueError("Data must be string, bytes or IOBase")
         elif url:
             if self.urlcache:
-                if not (validators.url(url) and re.match('^https?://') and len(url) <= 4096):
+                if not (validators.url(url) and re.match('^https?://', url) and len(url) <= 4096):
                     raise ValueError("URL invalid or too long")
                 file, _ = self.urlcache.fetch(url)
             else:

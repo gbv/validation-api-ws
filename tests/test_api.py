@@ -96,8 +96,10 @@ def test_validate_file(client):
 def test_validate_upload(client):
 
     data = {'file': (io.BytesIO(b"{}"), 'test.json')}
-
     client.fine('POST', '/json/validate', content_type='multipart/form-data', data=data)
+
+    client.fail('POST', '/json/validate', content_type='multipart/form-data', data={},
+                error="Missing file upload")
 
     client.fine('POST', '/json/validate', data=b"{}")
 

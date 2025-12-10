@@ -74,9 +74,15 @@ Each check is either a string, referencing another profile or a base format, or 
 
 ### Base formats
 
-- `json`
-- `xml`
-- ...
+- `json` - validate JSON syntax
+- `xml` - validate XML syntax (document must be well-formed XML)
+
+### Schema checks
+
+A check with two fields:
+
+- `language` - schema language: `jsonschema` (JSON Schema) or `xsd` (XML Schema)
+- `schema` - schema file or ULR
 
 ## API
 
