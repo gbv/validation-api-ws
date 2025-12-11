@@ -11,6 +11,10 @@ test:
 all: # TODO: include integration test with backends such as QPM
 	@. .venv/bin/activate && coverage run --branch -m pytest -v -s && coverage report -m && coverage html
 
+#.PHONY: docs
+#docs:
+#	mkdir -p docs; . .venv/bin/activate && jsonschema-markdown lib/validate/profiles-schema.json --no-footer --debug > docs/profiles-schema.md
+
 start:
 	@test -d files || mkdir files
 	@.venv/bin/python3 app.py

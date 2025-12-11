@@ -1,58 +1,31 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Configuration format of Validation API Webservice",
   "type": "array",
   "items": {
-    "type": "object",
-    "properties": {
-      "id": {
-        "description": "Unique identifier of the profile",
-        "$ref": "#/definitions/id"
-      },
-      "title": {
-        "description": "Name of the profile",
-        "type": "string"
-      },
-      "description": {
-        "description": "Short description of the profile",
-        "type": "string"
-      },
-      "url": {
-        "description": "URL of a document about the profile",
-        "$ref": "#/definitions/url"
-      },
-      "checks": {
-        "description": "List of checks to be executed when validating against this profile",
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/check"
-        }
-      },
-      "report": {
-        "description": "Whether the checks run asynchronously and a report is generated instead of directly returning the result",
-        "type": "boolean",
-        "default": false
-      }
-    },
-    "required": ["id"],
-    "additionalProperties": false
+    "$ref": "#/$defs/profile"
   },
-  "definitions": {
+  "$defs": {
     "id": {
+      "description": "unique identifier",
       "type": "string"
     },
     "url": {
+      "description": "HTTP or HTTP URL",
       "type": "string",
       "format": "uri",
       "pattern": "^https?://"
     },
     "check": {
+      "description": "Checks to execute for validating data",
       "oneOf": [
         {
           "description": "Identifier of another profile or a build-in data format",
-          "$ref": "#/definitions/id"
+          "$ref": "#/$defs/id"
         },
         {
           "type": "object",
+          "description": "Check against a schema",
           "properties": {
             "schema": {
               "description": "Schema file or URL",
@@ -65,6 +38,42 @@
           }
         }
       ]
+    },
+    "profile": {
+      "description": "Configuration of an application profile",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Unique identifier of the profile",
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "description": "Name of the profile",
+          "type": "string"
+        },
+        "description": {
+          "description": "Short description of the profile",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL of a document about the profile",
+          "$ref": "#/$defs/url"
+        },
+        "checks": {
+          "description": "List of checks to be executed when validating against this profile",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/check"
+          }
+        },
+        "report": {
+          "description": "Whether asynchronous generation of a validation report is enforced",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": ["id"],
+      "additionalProperties": false
     }
   }
 }
