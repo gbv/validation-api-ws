@@ -17,9 +17,11 @@ This web service implements a **[Data Validation API](#API)** being specified as
   - [Profiles](#profiles)
   - [Checks](#checks)
 - [API](#api)
-  - [GET /profiles](#get-profiles)
   - [GET /{profile}/validate](#get-profilevalidate)
   - [POST /{profile}/validate](#get-profilevalidate)
+  - [GET /profiles](#get-profiles)
+  - [GET /reports/{id}](#get-reportid)
+  - [DELETE /reports/{id}](#delete-reportid)
 - [Maintainers](#maintainers)
 - [Contributing](#contributing)
 - [License](#license)
@@ -91,13 +93,9 @@ The following schema languages are supported:
 
 ## API
 
-The webservice provides one endpoint to [list application profiles](#get-profiles) and one **Data Validation API** endpoint for each profile to validate data.
+Details of **Data Validation API** are still being specified, so details may change. The core response format is being specified as **[Data Validation Error Format]**. This implementation provides one endpoint for each profile, accesible via both [GET](#get-profilevalidate) and [POST](#get-profilevalidate) requests. The additional endpoint to [list application profiles](#get-profiles) is not part of the core Data Validation API: other implementation might provide only one endpoint to validate againsta single application profile.
 
-Details of Data Validation API are still being specified, so details may change. The core response format is being specified as **[Data Validation Error Format]**.
-
-### GET /profiles
-
-Return a list of application profiles configured at this instance of the validation service. The information is a subset of [profiles configuration](#profiles) limited to the public fields `id` (required), `title`, `description`, and `url`. Internal information about checks is not included.
+In addition there are optional endpoints [to look up](#get-reportsid) and [to remove](#delete-reportsid) validation reports.
 
 ### GET /{profile}/validate
 
@@ -129,6 +127,10 @@ curl http://localhost:7007/json/validate -d '[1,2'
 ### POST /{profile}/validate
 
 The validation endpoint can also be queried via HTTP POST: data can be passed as request body or as file upload (content type `multipart/form-data`). Additional query parameters are not supported.
+
+### GET /profiles
+
+Return a list of application profiles configured at this instance of the validation service. The information is a subset of [profiles configuration](#profiles) limited to the public fields `id` (required), `title`, `description`, `url`, and `report`. Internal information about checks is not included.
 
 ### GET /reports/{id}
 

@@ -63,7 +63,7 @@ class Validator(object):
             # TODO: support reference to profile as check
             checks[id] = [compile(c, root) for c in checks[id]]
 
-            about = ['id', 'title', 'description', 'url']
+            about = ['id', 'title', 'description', 'url', 'report']
             self.profiles[id] = {key: p[key] for key in about if p.get(key, False)}
 
         self.checks = checks

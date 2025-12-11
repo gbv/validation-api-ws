@@ -26,6 +26,11 @@
         "items": {
           "$ref": "#/definitions/check"
         }
+      },
+      "report": {
+        "description": "Whether the checks run asynchronously and a report is generated instead of directly returning the result",
+        "type": "boolean",
+        "default": false
       }
     },
     "required": ["id"],
