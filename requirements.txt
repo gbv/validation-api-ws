@@ -3,3 +3,5 @@ waitress==3.0.2
 requests
 jsonschema
 validators
+pyschematron>=1.1.0
+xmlschema

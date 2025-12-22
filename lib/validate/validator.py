@@ -23,12 +23,12 @@ def resolve(path, root):
 
 
 def compile(check, root):
-    if type(check) == str:
+    if type(check) is str:
         if check in builtin:
             return builtin[check]
         else:
             # TODO: allow to reference another profile
-            raise Exception(f"Unknown check: {config}")
+            raise Exception(f"Unknown check: {check}")
 
     if "schema" in check and "language" in check:
         # TODO: support URL in additio to local file

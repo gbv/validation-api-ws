@@ -1,9 +1,12 @@
 from lib import ValidationError, parseXML, validateXML
-from xml.parsers.expat.errors import codes
 import xml.etree.ElementTree as ET
 from pathlib import Path
+import json
 
 not_wellformed = [
+    ('<a>\n', {  # string
+        "message": "no element found",
+        "position": {"line": "2", "linecol": '2:1'}}),
     ('<a x="1"\n木="1" x="2"/>', {  # string
         "message": 'duplicate attribute',
         "position": {"line": "2", "linecol": "2:7"}}),
@@ -12,6 +15,7 @@ not_wellformed = [
         "position": {"line": "2", "linecol": "2:5"}}),
 ]
 
+# TODO: check invalid DTD
 
 def test_wellformed():
     assert isinstance(parseXML("<x/>"), ET.Element)
@@ -26,4 +30,15 @@ def test_not_wellformed():
             assert e.to_dict() == err
 
 
-files = Path(__file__).parent / 'files'
+dir = Path(__file__).parent
+
+with (dir / "xml-cases.json").open() as f:
+    cases = json.load(f)
+
+
+def test_invalid():
+    for test in cases:
+        file = dir / test["file"]
+        xml = parseXML(file.read_text())
+        errors = validateXML(xml, (dir / "schema.xsd"))
+        assert [e.to_dict() for e in errors] == test["errors"]

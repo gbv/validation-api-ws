@@ -166,6 +166,6 @@ See also <https://github.com/gbv/validation-server> for a previous implementatio
 
 MIT © 2025- Verbundzentrale des GBV (VZG)
 
-This work has been [funded by DFG in project *AQinDa*](https://gepris.dfg.de/gepris/projekt/521659096)
+This work has been funded [by DFG in project *AQinDa*](https://gepris.dfg.de/gepris/projekt/521659096)
 
 [Data Validation Error Format]: https://gbv.github.io/validation-error-format/

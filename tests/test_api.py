@@ -34,7 +34,7 @@ def tmp_dir():
 def client(tmp_dir):
     app.testing = True
 
-    files = Path(__file__).parent / 'files'
+    files = Path(__file__).parent / 'server'
 
     profiles = [{
         "id": "json",

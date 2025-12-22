@@ -1,0 +1,23 @@
+[
+  {
+    "file": "valid.xml",
+    "errors": []
+  },
+  {
+    "file": "invalid.xml",
+    "errors": [
+      {
+        "message": "attribute id='x': invalid literal for int() with base 10: 'x'",
+        "position": {
+          "xpath": "/a/b"
+        }
+      },
+      {
+        "message": "The content of element 'a' is not complete. Tag 'b' expected.",
+        "position": {
+          "xpath": "/a"
+        }
+      }
+    ]
+  }
+]

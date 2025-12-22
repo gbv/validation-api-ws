@@ -1,6 +1,3 @@
-import re
-
-
 class ValidationError(Exception):
     "Data Validation Error Format <https://gbv.github.io/validation-error-format/>"
 
