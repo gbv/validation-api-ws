@@ -1,6 +1,7 @@
-from lib import ValidationError, parseXML
-from xml.dom.minidom import Document
+from lib import ValidationError, parseXML, validateXML
 from xml.parsers.expat.errors import codes
+import xml.etree.ElementTree as ET
+from pathlib import Path
 
 not_wellformed = [
     ('<a x="1"\n木="1" x="2"/>', {  # string
@@ -12,10 +13,17 @@ not_wellformed = [
 ]
 
 
+def test_wellformed():
+    assert isinstance(parseXML("<x/>"), ET.Element)
+
+
 def test_not_wellformed():
     for (data, err) in not_wellformed:
         try:
-            assert isinstance(parseXML(data), Document)
+            assert isinstance(parseXML(data), ET.Element)
             assert 0 == "ValidationError should have been thrown!"  # pragma: no cover
         except ValidationError as e:
             assert e.to_dict() == err
+
+
+files = Path(__file__).parent / 'files'

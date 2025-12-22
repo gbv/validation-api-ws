@@ -1,21 +1,18 @@
 from .error import ValidationError
-from xml.dom.minidom import parse, parseString, Document
-from xml.parsers.expat import ExpatError
-from xml.parsers.expat.errors import messages
 from io import IOBase
+import xml.etree.ElementTree as ET
+from xml.parsers.expat import ErrorString
 
-
-def parseXML(data) -> Document:
+def parseXML(data) -> ET.Element:
     try:
         if isinstance(data, IOBase):
-            return parse(data)
+            return ET.parse(data)
         else:
-            return parseString(data)
-    except ExpatError as e:
-        msg = messages[e.code]
-        col = e.offset + 1
-        pos = {
-            "line": str(e.lineno),
-            "linecol": f"{e.lineno}:{col}",
-        }
-        raise ValidationError(msg, pos)
+            return ET.fromstring(data)
+    except ET.ParseError as e:
+        line, col = e.position
+        pos = {"line": f"{line}"}
+        # if col > 0: # TODO: does col start with zero?
+        pos["linecol"] = f"{line}:{col+1}"
+        code = e.code
+        raise ValidationError(ErrorString(code), pos)
